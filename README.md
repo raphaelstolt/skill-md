@@ -58,6 +58,30 @@ if ($skill->get('unsupported-field') === null) {
 }
 ```
 
+### Turning a `SKILL.md` representation into Markdown
+
+```php
+$skillMd = new SkillMd(
+    name: 'Code Review',
+    description: 'Performs automated code reviews.',
+    ['version' => '1.0.0', 'license' => 'MIT', 'tags' => ['php', 'qa']]
+);
+
+$markdown = $skillMd->toMarkdown();
+```
+
+``markdown
+---
+name: code-review
+description: Performs automated code reviews.
+version: 1.0.0
+license: MIT
+tags:
+- php
+- qa
+---
+```
+
 ### Running tests
 
 ```bash

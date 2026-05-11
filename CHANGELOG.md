@@ -7,8 +7,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [v0.0.3] - 2026-05-12
+
+### Added
+- New `toMarkdown` method.
+
 ## [v0.0.2] - 2026-05-11
 
+### Fixed
 - Filter disallowed fields.
 
 ## v0.0.1 - 2026-05-11

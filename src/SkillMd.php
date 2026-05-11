@@ -42,6 +42,17 @@ final class SkillMd
         );
     }
 
+    private function dasherizeName(): string
+    {
+        $name = \strtolower($this->name);
+
+        // Replace any non-alphanumeric sequence with a single dash
+        $name = \preg_replace('/[^a-z0-9]+/', '-', $name) ?? $name;
+
+        // Trim leading/trailing dashes
+        return \trim($name, '-');
+    }
+
     /**
      * @param array<string, mixed> $metadata
      */
@@ -138,6 +149,44 @@ final class SkillMd
             'description' => $this->description,
             ...$this->additionalFields,
         ];
+    }
+
+    public function toMarkdown(string $body = ''): string
+    {
+        $frontmatter = [
+            'name' => $this->dasherizeName(),
+            'description' => $this->description,
+            ...$this->additionalFields,
+        ];
+
+        $lines = ['---'];
+
+        foreach ($frontmatter as $key => $value) {
+            if (\is_array($value)) {
+                $lines[] = sprintf('%s:', $key);
+
+                foreach ($value as $item) {
+                    $lines[] = sprintf('  - %s', (string) $item);
+                }
+
+                continue;
+            }
+
+            if (\is_bool($value)) {
+                $value = $value ? 'true' : 'false';
+            }
+
+            $lines[] = sprintf('%s: %s', $key, (string) $value);
+        }
+
+        $lines[] = '---';
+
+        if ($body !== '') {
+            $lines[] = '';
+            $lines[] = $body;
+        }
+
+        return \implode(PHP_EOL, $lines);
     }
 
     /**

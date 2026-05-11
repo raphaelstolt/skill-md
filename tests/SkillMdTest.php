@@ -252,4 +252,58 @@ final class SkillMdTest extends TestCase
         self::assertNull($skill->get('unsupported-field'));
         self::assertNull($skill->get('another-invalid-field'));
     }
+
+    public function testItCanBeConvertedToMarkdown(): void
+    {
+        $skill = SkillMd::fromArray([
+            'name' => 'static-analysis',
+            'description' => 'Analyze PHP projects for quality issues.',
+            'author' => 'Raphael Stolt',
+            'version' => '1.0.0',
+            'tags' => ['php', 'qa'],
+            'disable-model-invocation' => true,
+        ]);
+
+        $markdown = $skill->toMarkdown(
+            "# Usage\n\nRun the analyzer against your project."
+        );
+
+        $expected = <<<MARKDOWN
+---
+name: static-analysis
+description: Analyze PHP projects for quality issues.
+author: Raphael Stolt
+version: 1.0.0
+tags:
+  - php
+  - qa
+disable-model-invocation: true
+---
+
+# Usage
+
+Run the analyzer against your project.
+MARKDOWN;
+
+        self::assertSame($expected, $markdown);
+    }
+
+    public function testItCanBeConvertedToMarkdownWithoutBody(): void
+    {
+        $skill = SkillMd::fromArray([
+            'name' => 'My Super Static Analysis Skill',
+            'description' => 'Analyze PHP projects for quality issues.',
+        ]);
+
+        $markdown = $skill->toMarkdown();
+
+        $expected = <<<MARKDOWN
+---
+name: my-super-static-analysis-skill
+description: Analyze PHP projects for quality issues.
+---
+MARKDOWN;
+
+        self::assertSame($expected, $markdown);
+    }
 }
