@@ -221,6 +221,23 @@ final class SkillMdTest extends TestCase
         self::assertSame($metadata, $skill->toArray());
     }
 
+    public function testItCanBeConvertedToArrayWithasherizedName(): void
+    {
+        $metadata = [
+            'name' => 'Super Code Formatter',
+            'description' => 'Formats code.',
+            'version' => '1.0.0',
+            'tags' => ['php'],
+        ];
+
+        $skill = SkillMd::fromArray($metadata);
+
+
+        $skillArray = $skill->toArray(true);
+        self::assertNotSame($metadata, $skillArray);
+        self::assertSame('super-code-formatter', $skillArray['name']);
+    }
+
     public function testItOnlyStoresAllowedAdditionalFields(): void
     {
         $skill = SkillMd::fromArray([

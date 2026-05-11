@@ -142,8 +142,16 @@ final class SkillMd
     /**
      * @return array<string, mixed>
      */
-    public function toArray(): array
+    public function toArray(bool $dasherizeName= false): array
     {
+        if ($dasherizeName) {
+            return [
+                'name' => $this->dasherizeName(),
+                'description' => $this->description,
+                ...$this->additionalFields,
+            ];
+        }
+
         return [
             'name' => $this->name,
             'description' => $this->description,
