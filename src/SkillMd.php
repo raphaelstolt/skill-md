@@ -7,6 +7,9 @@ namespace Stolt\Ai;
 
 final class SkillMd
 {
+    private const MAX_NAME_LENGTH = 64;
+    private const MAX_DESCRIPTION_LENGTH = 1024;
+
     /**
      * @var list<string>
      */
@@ -58,6 +61,21 @@ final class SkillMd
      */
     public static function fromArray(array $metadata): self
     {
+        $name = (string) ($metadata['name'] ?? '');
+        $description = (string) ($metadata['description'] ?? '');
+
+        if (\strlen($name) > self::MAX_NAME_LENGTH) {
+            throw new \InvalidArgumentException(
+                'Name must not exceed ' . self::MAX_NAME_LENGTH . ' characters.'
+            );
+        }
+
+        if (\strlen($description) > self::MAX_DESCRIPTION_LENGTH) {
+            throw new \InvalidArgumentException(
+                'Description must not exceed ' . self::MAX_DESCRIPTION_LENGTH . ' characters.'
+            );
+        }
+
         $additionalFields = \array_diff_key(
             $metadata,
             \array_flip(['name', 'description'])
@@ -74,8 +92,8 @@ final class SkillMd
         );
 
         return new self(
-            (string) ($metadata['name'] ?? ''),
-            (string) ($metadata['description'] ?? ''),
+            $name,
+            $description,
             $filteredAdditionalFields
         );
     }

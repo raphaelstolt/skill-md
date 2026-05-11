@@ -323,4 +323,37 @@ MARKDOWN;
 
         self::assertSame($expected, $markdown);
     }
+
+    public function testItThrowsWhenNameIsTooLong(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Name must not exceed 64 characters.');
+
+        SkillMd::fromArray([
+            'name' => \str_repeat('a', 65),
+            'description' => 'Valid description',
+        ]);
+    }
+
+    public function testItThrowsWhenDescriptionIsTooLong(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Description must not exceed 1024 characters.');
+
+        SkillMd::fromArray([
+            'name' => 'valid-name',
+            'description' => \str_repeat('a', 1025),
+        ]);
+    }
+
+    public function testItAcceptsMaxAllowedLengths(): void
+    {
+        $skill = SkillMd::fromArray([
+            'name' => \str_repeat('a', 64),
+            'description' => \str_repeat('b', 1024),
+        ]);
+
+        self::assertSame(64, \strlen($skill->name()));
+        self::assertSame(1024, \strlen($skill->description()));
+    }
 }
