@@ -36,7 +36,7 @@ $skillMd = SkillMd::fromArray($skillMdData);
 $skillMd = new SkillMd(
     name: 'Code Review',
     description: 'Performs automated code reviews.',
-    ['version' => '1.0.0', 'language' => 'PHP', tags' => ['php', 'qa']]
+    ['version' => '1.0.0', 'license' => 'MIT', tags' => ['php', 'qa']]
 );
 ```
 
@@ -47,7 +47,15 @@ $skillName = $skillMd->name();
 $skilleDescription = $skillMd->description();
 $skillVersion = $skillMd->version();
 $skillTags = $skillMd->tags();
-$skillLanguage = $skillMd->get('language');
+$skillLicense = $skillMd->get('license');
+
+if ($skill->has('unsupported-field') === false) {
+    echo 'This field is not supported.';
+}
+
+if ($skill->get('unsupported-field') === null) {
+    echo 'This field is not supported and has no value.';
+}
 ```
 
 ### Running tests
