@@ -24,6 +24,63 @@ final class SkillMdTest extends TestCase
         self::assertSame('Performs automated code reviews.', $skill->description());
     }
 
+    public function testItFiltersOutFalseAdditionalFieldValues(): void
+    {
+        $skill = SkillMd::fromArray([
+            'name' => 'Static Analysis',
+            'description' => 'Analyzes PHP codebases.',
+            'author' => 'Raphael Stolt',
+            'version' => false,
+            'tags' => ['php', 'qa'],
+            'disable-model-invocation' => false,
+        ]);
+
+        self::assertSame(
+            [
+                'author' => 'Raphael Stolt',
+                'tags' => ['php', 'qa'],
+            ],
+            $skill->additionalFields()
+        );
+
+        self::assertFalse($skill->has('version'));
+        self::assertFalse($skill->has('disable-model-invocation'));
+
+        self::assertNull($skill->get('version'));
+        self::assertNull($skill->get('disable-model-invocation'));
+    }
+
+    public function testConstructorFiltersOutFalseAdditionalFieldValues(): void
+    {
+        $reflection = new \ReflectionClass(SkillMd::class);
+
+        /** @var SkillMd $skill */
+        $skill = $reflection->newInstanceWithoutConstructor();
+
+        $constructor = $reflection->getConstructor();
+
+        $constructor->invoke(
+            $skill,
+            'Static Analysis',
+            'Analyzes PHP codebases.',
+            [
+                'author' => 'Raphael Stolt',
+                'version' => false,
+                'tags' => ['php', 'qa'],
+            ]
+        );
+
+        self::assertSame(
+            [
+                'author' => 'Raphael Stolt',
+                'tags' => ['php', 'qa'],
+            ],
+            $skill->additionalFields()
+        );
+
+        self::assertFalse($skill->has('version'));
+    }
+
     public function testItStoresAdditionalFields(): void
     {
         $metadata = [

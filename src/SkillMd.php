@@ -37,6 +37,9 @@ final class SkillMd
         private string $description,
         private array  $additionalFields = [],
     ) {
+        $this->additionalFields = self::filterAdditionalFields(
+            $this->additionalFields
+        );
     }
 
     /**
@@ -54,11 +57,15 @@ final class SkillMd
             \array_flip(self::ALLOWED_FIELDS)
         );
 
+        $filteredAdditionalFields = \array_filter(
+            $allowedAdditionalFields,
+            static fn (mixed $value): bool => $value !== false
+        );
 
         return new self(
-            (string) $metadata['name'],
-            (string) $metadata['description'],
-            $allowedAdditionalFields
+            (string) ($metadata['name'] ?? ''),
+            (string) ($metadata['description'] ?? ''),
+            $filteredAdditionalFields
         );
     }
 
@@ -131,5 +138,18 @@ final class SkillMd
             'description' => $this->description,
             ...$this->additionalFields,
         ];
+    }
+
+    /**
+     * @param array<string, mixed> $additionalFields
+     *
+     * @return array<string, mixed>
+     */
+    private static function filterAdditionalFields(array $additionalFields): array
+    {
+        return \array_filter(
+            $additionalFields,
+            static fn (mixed $value): bool => $value !== false
+        );
     }
 }
