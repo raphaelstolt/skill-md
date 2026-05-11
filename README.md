@@ -36,7 +36,7 @@ $skillMd = SkillMd::fromArray($skillMdData);
 $skillMd = new SkillMd(
     name: 'Code Review',
     description: 'Performs automated code reviews.',
-    ['version' => '1.0.0', 'license' => 'MIT', tags' => ['php', 'qa']]
+    ['version' => '1.0.0', 'license' => 'MIT', 'tags' => ['php', 'qa']]
 );
 ```
 
