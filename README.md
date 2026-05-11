@@ -2,7 +2,7 @@
 
 ![Test Status](https://github.com/raphaelstolt/skill-md/workflows/test/badge.svg)
 ![Lint Status](https://github.com/raphaelstolt/skill-md/workflows/lint/badge.svg)
-[![Version](http://img.shields.io/packagist/v/stolt/skill-md.svg?style=flat)](https://packagist.org/packages/stolt/skill-validator)
+[![Version](http://img.shields.io/packagist/v/stolt/skill-md.svg?style=flat)](https://packagist.org/packages/stolt/skill-md)
 ![Downloads](https://img.shields.io/packagist/dt/stolt/skill-md)
 ![PHP Version](https://img.shields.io/badge/php-8.2+-ff69b4.svg)
 [![PDS Skeleton](https://img.shields.io/badge/pds-skeleton-blue.svg?style=flat)](https://github.com/php-pds/skeleton)
