@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Stolt\Ai;
 
 final class SkillMd
@@ -10,6 +9,8 @@ final class SkillMd
     private const MAX_NAME_LENGTH = 64;
 
     private const MAX_DESCRIPTION_LENGTH = 1024;
+
+    private const MAX_BODY_LENGTH = 65535;
 
     /**
      * @var list<string>
@@ -39,6 +40,7 @@ final class SkillMd
     private function __construct(
         private string $name,
         private string $description,
+        private string $body,
         private array  $additionalFields = [],
     ) {
         $this->additionalFields = self::filterAdditionalFields(
@@ -64,6 +66,7 @@ final class SkillMd
     {
         $name = (string) ($metadata['name'] ?? '');
         $description = (string) ($metadata['description'] ?? '');
+        $body = (string) ($metadata['body'] ?? '');
 
         if (\strlen($name) > self::MAX_NAME_LENGTH) {
             throw new \InvalidArgumentException(
@@ -77,9 +80,33 @@ final class SkillMd
             );
         }
 
+        if (\strlen($body) > self::MAX_BODY_LENGTH) {
+            throw new \InvalidArgumentException(
+                'Body must not exceed ' . self::MAX_BODY_LENGTH . ' characters.'
+            );
+        }
+
+        if ($name === '') {
+            throw new \InvalidArgumentException(
+                'Name is required.'
+            );
+        }
+
+        if ($description === '') {
+            throw new \InvalidArgumentException(
+                'Description is required.'
+            );
+        }
+
+        if ($body === '') {
+            throw new \InvalidArgumentException(
+                'Body is required.'
+            );
+        }
+
         $additionalFields = \array_diff_key(
             $metadata,
-            \array_flip(['name', 'description'])
+            \array_flip(['name', 'description', 'body'])
         );
 
         $allowedAdditionalFields = \array_intersect_key(
@@ -95,6 +122,7 @@ final class SkillMd
         return new self(
             $name,
             $description,
+            $body,
             $filteredAdditionalFields
         );
     }
@@ -109,10 +137,16 @@ final class SkillMd
         return $this->description;
     }
 
+    public function body(): string
+    {
+        return $this->body;
+    }
+
     public function has(string $key): bool
     {
         return $key === 'name'
             || $key === 'description'
+            || $key === 'body'
             || \array_key_exists($key, $this->additionalFields);
     }
 
@@ -121,6 +155,7 @@ final class SkillMd
         return match ($key) {
             'name' => $this->name,
             'description' => $this->description,
+            'body' => $this->body,
             default => $this->additionalFields[$key] ?? $default,
         };
     }
@@ -167,6 +202,7 @@ final class SkillMd
             return [
                 'name' => $this->dasherizeName(),
                 'description' => $this->description,
+                'body' => $this->body,
                 ...$this->additionalFields,
             ];
         }
@@ -174,11 +210,12 @@ final class SkillMd
         return [
             'name' => $this->name,
             'description' => $this->description,
+            'body' => $this->body,
             ...$this->additionalFields,
         ];
     }
 
-    public function toMarkdown(string $body = ''): string
+    public function toMarkdown(): string
     {
         $frontmatter = [
             'name' => $this->dasherizeName(),
@@ -208,9 +245,9 @@ final class SkillMd
 
         $lines[] = '---';
 
-        if ($body !== '') {
+        if ($this->body !== '') {
             $lines[] = '';
-            $lines[] = $body;
+            $lines[] = $this->body;
         }
 
         return \implode(PHP_EOL, $lines);

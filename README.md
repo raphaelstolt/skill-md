@@ -23,6 +23,7 @@ composer require stolt/skill-md
  $skillMdData = [
     'name' => 'Code Review',
     'description' => 'Performs automated code reviews.',
+    'body' => '# Some longer, skill describing Markdown content.',
     'version' => '1.0.0',
     'tags' => ['php', 'qa'],
 ];
@@ -34,8 +35,9 @@ $skillMd = SkillMd::fromArray($skillMdData);
 
 ```php
 $skillMd = new SkillMd(
-    name: 'Code Review',
-    description: 'Performs automated code reviews.',
+    'Code Review',
+    'Performs automated code reviews.',
+    '# Some longer, skill describing Markdown content.',
     ['version' => '1.0.0', 'license' => 'MIT', 'tags' => ['php', 'qa']]
 );
 ```
@@ -44,7 +46,8 @@ $skillMd = new SkillMd(
 
 ```php
 $skillName = $skillMd->name();
-$skilleDescription = $skillMd->description();
+$skillDescription = $skillMd->description();
+$skillBody = $skillMd->body();
 $skillVersion = $skillMd->version();
 $skillTags = $skillMd->tags();
 $skillLicense = $skillMd->get('license');
@@ -64,8 +67,9 @@ The programmatical representation:
 
 ```php
 $skillMd = new SkillMd(
-    name: 'Code Review',
-    description: 'Performs automated code reviews.',
+    'Code Review',
+    'Performs automated code reviews.',
+    '# Some longer, skill describing Markdown content',
     ['version' => '1.0.0', 'license' => 'MIT', 'tags' => ['php', 'qa']]
 );
 
@@ -84,6 +88,8 @@ tags:
 - php
 - qa
 ---
+
+# Some longer, skill describing Markdown content
 ```
 
 ### Running tests

@@ -14,6 +14,7 @@ final class SkillMdTest extends TestCase
         $metadata = [
             'name' => 'Code Review',
             'description' => 'Performs automated code reviews.',
+            'body' => 'Some longer Markdown content',
             'version' => '1.0.0',
             'tags' => ['php', 'qa'],
         ];
@@ -24,11 +25,49 @@ final class SkillMdTest extends TestCase
         self::assertSame('Performs automated code reviews.', $skill->description());
     }
 
+    public function testItCanAlsoHandleAMarkdownBody(): void
+    {
+        $skill = SkillMd::fromArray([
+            'name' => 'Code Review',
+            'description' => 'Reviews pull requests.',
+            'body' => 'Please review the diff carefully.',
+            'tags' => ['php', 'review'],
+        ]);
+
+        self::assertTrue($skill->has('body'));
+
+        self::assertSame(
+            'Please review the diff carefully.',
+            $skill->body()
+        );
+
+        self::assertSame(
+            'Please review the diff carefully.',
+            $skill->get('body')
+        );
+
+        self::assertSame(
+            [
+                'name' => 'Code Review',
+                'description' => 'Reviews pull requests.',
+                'body' => 'Please review the diff carefully.',
+                'tags' => ['php', 'review'],
+            ],
+            $skill->toArray()
+        );
+
+        self::assertStringContainsString(
+            'Please review the diff carefully.',
+            $skill->toMarkdown()
+        );
+    }
+
     public function testItFiltersOutFalseAdditionalFieldValues(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Static Analysis',
             'description' => 'Analyzes PHP codebases.',
+            'body' => 'Some longer Markdown content',
             'author' => 'Raphael Stolt',
             'version' => false,
             'tags' => ['php', 'qa'],
@@ -63,6 +102,7 @@ final class SkillMdTest extends TestCase
             $skill,
             'Static Analysis',
             'Analyzes PHP codebases.',
+            'Some Markdown body',
             [
                 'author' => 'Raphael Stolt',
                 'version' => false,
@@ -86,6 +126,7 @@ final class SkillMdTest extends TestCase
         $metadata = [
             'name' => 'Lint',
             'description' => 'Checks README files.',
+            'body' => 'Some longer Markdown content',
             'version' => '2.1.0',
             'author' => 'Raphael',
         ];
@@ -106,6 +147,7 @@ final class SkillMdTest extends TestCase
         $skill = SkillMd::fromArray([
             'name' => 'Test',
             'description' => 'Description',
+            'body' => 'Some longer Markdown content',
             'foo' => 'bar',
         ]);
 
@@ -120,6 +162,7 @@ final class SkillMdTest extends TestCase
         $skill = SkillMd::fromArray([
             'name' => 'Analyzer',
             'description' => 'Analyzes projects.',
+            'body' => 'Some longer Markdown content',
             'license' => 'MIT',
         ]);
 
@@ -133,6 +176,7 @@ final class SkillMdTest extends TestCase
         $skill = SkillMd::fromArray([
             'name' => 'Analyzer',
             'description' => 'Analyzes projects.',
+            'body' => 'Some longer Markdown content',
         ]);
 
         self::assertNull($skill->get('missing'));
@@ -144,6 +188,7 @@ final class SkillMdTest extends TestCase
         $skill = SkillMd::fromArray([
             'name' => 'Skill',
             'description' => 'Description',
+            'body' => 'Some longer Markdown content',
             'tags' => ['php', 'testing'],
         ]);
 
@@ -158,6 +203,7 @@ final class SkillMdTest extends TestCase
         $skill = SkillMd::fromArray([
             'name' => 'Skill',
             'description' => 'Description',
+            'body' => 'Some longer Markdown content',
             'tags' => 'invalid',
         ]);
 
@@ -169,6 +215,7 @@ final class SkillMdTest extends TestCase
         $skill = SkillMd::fromArray([
             'name' => 'Skill',
             'description' => 'Description',
+            'body' => 'Some longer Markdown content',
             'version' => '1.2.3',
         ]);
 
@@ -180,6 +227,7 @@ final class SkillMdTest extends TestCase
         $skill = SkillMd::fromArray([
             'name' => 'Skill',
             'description' => 'Description',
+            'body' => 'Some longer Markdown content',
         ]);
 
         self::assertNull($skill->version());
@@ -190,6 +238,7 @@ final class SkillMdTest extends TestCase
         $skill = SkillMd::fromArray([
             'name' => 'Skill',
             'description' => 'Description',
+            'body' => 'Some longer Markdown content',
             'version' => '',
         ]);
 
@@ -201,6 +250,7 @@ final class SkillMdTest extends TestCase
         $skill = SkillMd::fromArray([
             'name' => 'Skill',
             'description' => 'Description',
+            'body' => 'Some longer Markdown content',
             'version' => 123,
         ]);
 
@@ -212,6 +262,7 @@ final class SkillMdTest extends TestCase
         $metadata = [
             'name' => 'Formatter',
             'description' => 'Formats code.',
+            'body' => '# Some Markdown content',
             'version' => '1.0.0',
             'tags' => ['php'],
         ];
@@ -226,6 +277,7 @@ final class SkillMdTest extends TestCase
         $metadata = [
             'name' => 'Super Code Formatter',
             'description' => 'Formats code.',
+            'body' => 'Some longer Markdown content',
             'version' => '1.0.0',
             'tags' => ['php'],
         ];
@@ -243,6 +295,7 @@ final class SkillMdTest extends TestCase
         $skill = SkillMd::fromArray([
             'name' => 'Static Analysis',
             'description' => 'Analyzes PHP codebases.',
+            'body' => 'Some longer Markdown content',
             'author' => 'Raphael Stolt',
             'version' => '1.0.0',
             'tags' => ['php', 'qa'],
@@ -272,9 +325,16 @@ final class SkillMdTest extends TestCase
 
     public function testItCanBeConvertedToMarkdown(): void
     {
+        $markdownBody = <<<MARKDOWN_BODY
+# Usage
+
+Run the analyzer against your project.
+MARKDOWN_BODY;
+
         $skill = SkillMd::fromArray([
             'name' => 'static-analysis',
             'description' => 'Analyze PHP projects for quality issues.',
+            'body' => $markdownBody,
             'author' => 'Raphael Stolt',
             'version' => '1.0.0',
             'tags' => ['php', 'qa'],
@@ -310,6 +370,7 @@ MARKDOWN;
         $skill = SkillMd::fromArray([
             'name' => 'My Super Static Analysis Skill',
             'description' => 'Analyze PHP projects for quality issues.',
+            'body' => '# Some longer Markdown content',
         ]);
 
         $markdown = $skill->toMarkdown();
@@ -319,6 +380,8 @@ MARKDOWN;
 name: my-super-static-analysis-skill
 description: Analyze PHP projects for quality issues.
 ---
+
+# Some longer Markdown content
 MARKDOWN;
 
         self::assertSame($expected, $markdown);
@@ -346,11 +409,57 @@ MARKDOWN;
         ]);
     }
 
+    public function testItThrowsWhenBodyIsTooLong(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Body must not exceed 65535 characters.');
+
+        SkillMd::fromArray([
+            'name' => 'valid-name',
+            'description' => 'valid description',
+            'body' => \str_repeat('a', 65536),
+        ]);
+    }
+
+    public function testItThrowsWhenNameIsNotSet(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Name is required.');
+
+        SkillMd::fromArray([
+            'description' => 'Some description',
+            'body' => '# Some longer Markdown content',
+        ]);
+    }
+
+    public function testItThrowsWhenDescriptionIsNotSet(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Description is required.');
+
+        SkillMd::fromArray([
+            'name' => 'some-name',
+            'body' => '# Some longer Markdown content',
+        ]);
+    }
+
+    public function testItThrowsWhenBodyIsNotSet(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Body is required.');
+
+        SkillMd::fromArray([
+            'name' => 'some-name',
+            'description' => 'Some description'
+        ]);
+    }
+
     public function testItAcceptsMaxAllowedLengths(): void
     {
         $skill = SkillMd::fromArray([
             'name' => \str_repeat('a', 64),
             'description' => \str_repeat('b', 1024),
+            'body' => '# Some longer Markdown content',
         ]);
 
         self::assertSame(64, \strlen($skill->name()));
