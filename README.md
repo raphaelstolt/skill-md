@@ -40,6 +40,13 @@ $skillMd = new SkillMd(
     '# Some longer, skill describing Markdown content.',
     ['version' => '1.0.0', 'license' => 'MIT', 'tags' => ['php', 'qa']]
 );
+
+$skillMdViaFactory = SkillMd::create(
+    'Code Review',
+    'Performs automated code reviews.',
+    '# Some longer, skill describing Markdown content.',
+    ['version' => '1.0.0', 'license' => 'MIT', 'tags' => ['php', 'qa']]
+);
 ```
 
 ### Accessing `SKILL.md` data

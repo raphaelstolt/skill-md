@@ -48,26 +48,36 @@ final class SkillMd
         );
     }
 
-    private function dasherizeName(): string
-    {
-        $name = \strtolower($this->name);
+    public static function create(
+        string $name,
+        string $description,
+        string $body,
+        array $additionalFields = [],
+    ): self {
 
-        // Replace any non-alphanumeric sequence with a single dash
-        $name = \preg_replace('/[^a-z0-9]+/', '-', $name) ?? $name;
+        self::validateRequiredProperties($name, $description, $body);
 
-        // Trim leading/trailing dashes
-        return \trim($name, '-');
+        $allowedAdditionalFields = \array_intersect_key(
+            $additionalFields,
+            \array_flip(self::ALLOWED_FIELDS)
+        );
+
+        return new self(
+            $name,
+            $description,
+            $body,
+            $allowedAdditionalFields
+        );
     }
 
     /**
-     * @param array<string, mixed> $metadata
+     * @param string $name
+     * @param string $description
+     * @param string $body
+     * @return void
      */
-    public static function fromArray(array $metadata): self
+    public static function validateRequiredProperties(string $name, string $description, string $body): void
     {
-        $name = (string) ($metadata['name'] ?? '');
-        $description = (string) ($metadata['description'] ?? '');
-        $body = (string) ($metadata['body'] ?? '');
-
         if (\strlen($name) > self::MAX_NAME_LENGTH) {
             throw new \InvalidArgumentException(
                 'Name must not exceed ' . self::MAX_NAME_LENGTH . ' characters.'
@@ -103,6 +113,29 @@ final class SkillMd
                 'Body is required.'
             );
         }
+    }
+
+    private function dasherizeName(): string
+    {
+        $name = \strtolower($this->name);
+
+        // Replace any non-alphanumeric sequence with a single dash
+        $name = \preg_replace('/[^a-z0-9]+/', '-', $name) ?? $name;
+
+        // Trim leading/trailing dashes
+        return \trim($name, '-');
+    }
+
+    /**
+     * @param array<string, mixed> $metadata
+     */
+    public static function fromArray(array $metadata): self
+    {
+        $name = (string) ($metadata['name'] ?? '');
+        $description = (string) ($metadata['description'] ?? '');
+        $body = (string) ($metadata['body'] ?? '');
+
+        self::validateRequiredProperties($name, $description, $body);
 
         $additionalFields = \array_diff_key(
             $metadata,
@@ -119,7 +152,7 @@ final class SkillMd
             static fn (mixed $value): bool => $value !== false
         );
 
-        return new self(
+        return self::create(
             $name,
             $description,
             $body,

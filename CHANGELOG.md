@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Added
 - New `toMarkdown` method.
+- New `create` factory method.
 - Turn `body` into a direct class property.
 
 ## [v0.0.2] - 2026-05-11
@@ -22,6 +23,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Initial release.
 
-[Unreleased]: https://github.com/raphaelstolt/skill-md/compare/v0.0.1...HEAD
+[Unreleased]: https://github.com/raphaelstolt/skill-md/compare/v0.0.3...HEAD
 
+[v0.0.3]: https://github.com/raphaelstolt/skill-md/compare/v0.0.2...v0.0.3
 [v0.0.2]: https://github.com/raphaelstolt/skill-md/compare/v0.0.1...v0.0.2

@@ -25,6 +25,40 @@ final class SkillMdTest extends TestCase
         self::assertSame('Performs automated code reviews.', $skill->description());
     }
 
+    public function testItCanBeCreatedViaFactoryMethod(): void
+    {
+        $skill = SkillMd::create(
+            'Code Review',
+            'Reviews pull requests.',
+            'Please review carefully.',
+            [
+                'tags' => ['php', 'review'],
+                'version' => '1.0.0',
+            ]
+        );
+
+        self::assertSame('Code Review', $skill->name());
+        self::assertSame(
+            'Reviews pull requests.',
+            $skill->description()
+        );
+
+        self::assertSame(
+            'Please review carefully.',
+            $skill->body()
+        );
+
+        self::assertSame(
+            ['php', 'review'],
+            $skill->tags()
+        );
+
+        self::assertSame(
+            '1.0.0',
+            $skill->version()
+        );
+    }
+
     public function testItCanAlsoHandleAMarkdownBody(): void
     {
         $skill = SkillMd::fromArray([
