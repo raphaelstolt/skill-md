@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
 - New `toMarkdown` method.
 - New `create` factory method.
+
+### Changed
 - Turn `body` into a direct class property.
 
 ## [v0.0.2] - 2026-05-11
