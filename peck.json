@@ -5,7 +5,9 @@
             "php",
             "yaml",
             "booleans",
-            "frontmatter"
+            "frontmatter",
+            "dasherize",
+            "dasherized"
         ],
         "paths": []
     }
