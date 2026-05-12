@@ -60,6 +60,8 @@ if ($skill->get('unsupported-field') === null) {
 
 ### Turning a `SKILL.md` representation into Markdown
 
+The programmatical representation:
+
 ```php
 $skillMd = new SkillMd(
     name: 'Code Review',
@@ -70,7 +72,9 @@ $skillMd = new SkillMd(
 $markdown = $skillMd->toMarkdown();
 ```
 
-``markdown
+The Markdown representation:
+
+```markdown
 ---
 name: code-review
 description: Performs automated code reviews.
