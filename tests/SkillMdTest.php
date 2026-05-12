@@ -221,7 +221,7 @@ final class SkillMdTest extends TestCase
         self::assertSame($metadata, $skill->toArray());
     }
 
-    public function testItCanBeConvertedToArrayWithasherizedName(): void
+    public function testItCanBeConvertedToArrayWithDasherizedName(): void
     {
         $metadata = [
             'name' => 'Super Code Formatter',
