@@ -8,6 +8,7 @@ namespace Stolt\Ai;
 final class SkillMd
 {
     private const MAX_NAME_LENGTH = 64;
+
     private const MAX_DESCRIPTION_LENGTH = 1024;
 
     /**
@@ -160,7 +161,7 @@ final class SkillMd
     /**
      * @return array<string, mixed>
      */
-    public function toArray(bool $dasherizeName= false): array
+    public function toArray(bool $dasherizeName = false): array
     {
         if ($dasherizeName) {
             return [
@@ -189,10 +190,10 @@ final class SkillMd
 
         foreach ($frontmatter as $key => $value) {
             if (\is_array($value)) {
-                $lines[] = sprintf('%s:', $key);
+                $lines[] = \sprintf('%s:', $key);
 
                 foreach ($value as $item) {
-                    $lines[] = sprintf('  - %s', (string) $item);
+                    $lines[] = \sprintf('  - %s', (string) $item);
                 }
 
                 continue;
@@ -202,7 +203,7 @@ final class SkillMd
                 $value = $value ? 'true' : 'false';
             }
 
-            $lines[] = sprintf('%s: %s', $key, (string) $value);
+            $lines[] = \sprintf('%s: %s', $key, (string) $value);
         }
 
         $lines[] = '---';
