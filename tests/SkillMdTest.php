@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace Stolt\Ai\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Stolt\Ai\SkillMd;
 
 final class SkillMdTest extends TestCase
 {
-    public function testItCanBeCreatedFromArray(): void
+    #[Test]
+    public function itCanBeCreatedFromArray(): void
     {
         $metadata = [
             'name' => 'Code Review',
             'description' => 'Performs automated code reviews.',
-            'body' => 'Some longer Markdown content',
+            'body' => '# Some longer Markdown content',
             'version' => '1.0.0',
             'tags' => ['php', 'qa'],
         ];
@@ -23,9 +25,11 @@ final class SkillMdTest extends TestCase
 
         self::assertSame('Code Review', $skill->name());
         self::assertSame('Performs automated code reviews.', $skill->description());
+        self::assertSame('# Some longer Markdown content', $skill->body());
     }
 
-    public function testItCanBeCreatedViaFactoryMethod(): void
+    #[Test]
+    public function itCanBeCreatedViaFactoryMethod(): void
     {
         $skill = SkillMd::create(
             'Code Review',
@@ -59,7 +63,8 @@ final class SkillMdTest extends TestCase
         );
     }
 
-    public function testItCanAlsoHandleAMarkdownBody(): void
+    #[Test]
+    public function itCanAlsoHandleAMarkdownBody(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Code Review',
@@ -96,7 +101,8 @@ final class SkillMdTest extends TestCase
         );
     }
 
-    public function testItFiltersOutFalseAdditionalFieldValues(): void
+    #[Test]
+    public function itFiltersOutFalseAdditionalFieldValues(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Static Analysis',
@@ -123,7 +129,8 @@ final class SkillMdTest extends TestCase
         self::assertNull($skill->get('disable-model-invocation'));
     }
 
-    public function testConstructorFiltersOutFalseAdditionalFieldValues(): void
+    #[Test]
+    public function constructorFiltersOutFalseAdditionalFieldValues(): void
     {
         $reflection = new \ReflectionClass(SkillMd::class);
 
@@ -155,7 +162,8 @@ final class SkillMdTest extends TestCase
         self::assertFalse($skill->has('version'));
     }
 
-    public function testItStoresAdditionalFields(): void
+    #[Test]
+    public function itStoresAdditionalFields(): void
     {
         $metadata = [
             'name' => 'Lint',
@@ -176,7 +184,8 @@ final class SkillMdTest extends TestCase
         );
     }
 
-    public function testItCanDetermineIfAFieldExists(): void
+    #[Test]
+    public function itCanDetermineIfAFieldExists(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Test',
@@ -191,12 +200,13 @@ final class SkillMdTest extends TestCase
         self::assertFalse($skill->has('missing'));
     }
 
-    public function testItCanRetrieveFields(): void
+    #[Test]
+    public function itCanRetrieveFields(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Analyzer',
             'description' => 'Analyzes projects.',
-            'body' => 'Some longer Markdown content',
+            'body' => '# Some longer Markdown content',
             'license' => 'MIT',
         ]);
 
@@ -205,7 +215,8 @@ final class SkillMdTest extends TestCase
         self::assertSame('MIT', $skill->get('license'));
     }
 
-    public function testItReturnsDefaultValueForMissingField(): void
+    #[Test]
+    public function itReturnsDefaultValueForMissingField(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Analyzer',
@@ -217,7 +228,8 @@ final class SkillMdTest extends TestCase
         self::assertSame('default', $skill->get('missing', 'default'));
     }
 
-    public function testItReturnsTags(): void
+    #[Test]
+    public function itReturnsTags(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Skill',
@@ -232,7 +244,8 @@ final class SkillMdTest extends TestCase
         );
     }
 
-    public function testItReturnsEmptyTagsWhenTagsAreNotAnArray(): void
+    #[Test]
+    public function itReturnsEmptyTagsWhenTagsAreNotAnArray(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Skill',
@@ -244,7 +257,8 @@ final class SkillMdTest extends TestCase
         self::assertSame([], $skill->tags());
     }
 
-    public function testItReturnsVersion(): void
+    #[Test]
+    public function itReturnsVersion(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Skill',
@@ -256,7 +270,8 @@ final class SkillMdTest extends TestCase
         self::assertSame('1.2.3', $skill->version());
     }
 
-    public function testItReturnsNullWhenVersionIsMissing(): void
+    #[Test]
+    public function itReturnsNullWhenVersionIsMissing(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Skill',
@@ -267,7 +282,8 @@ final class SkillMdTest extends TestCase
         self::assertNull($skill->version());
     }
 
-    public function testItReturnsNullWhenVersionIsEmpty(): void
+    #[Test]
+    public function itReturnsNullWhenVersionIsEmpty(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Skill',
@@ -279,7 +295,8 @@ final class SkillMdTest extends TestCase
         self::assertNull($skill->version());
     }
 
-    public function testItReturnsNullWhenVersionIsNotAString(): void
+    #[Test]
+    public function itReturnsNullWhenVersionIsNotAString(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Skill',
@@ -291,7 +308,8 @@ final class SkillMdTest extends TestCase
         self::assertNull($skill->version());
     }
 
-    public function testItCanBeConvertedToArray(): void
+    #[Test]
+    public function itCanBeConvertedToArray(): void
     {
         $metadata = [
             'name' => 'Formatter',
@@ -306,7 +324,8 @@ final class SkillMdTest extends TestCase
         self::assertSame($metadata, $skill->toArray());
     }
 
-    public function testItCanBeConvertedToArrayWithDasherizedName(): void
+    #[Test]
+    public function itCanBeConvertedToArrayWithDasherizedName(): void
     {
         $metadata = [
             'name' => 'Super Code Formatter',
@@ -324,7 +343,8 @@ final class SkillMdTest extends TestCase
         self::assertSame('super-code-formatter', $skillArray['name']);
     }
 
-    public function testItOnlyStoresAllowedAdditionalFields(): void
+    #[Test]
+    public function itOnlyStoresAllowedAdditionalFields(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'Static Analysis',
@@ -357,7 +377,8 @@ final class SkillMdTest extends TestCase
         self::assertNull($skill->get('another-invalid-field'));
     }
 
-    public function testItCanBeConvertedToMarkdown(): void
+    #[Test]
+    public function itCanBeConvertedToMarkdown(): void
     {
         $markdownBody = <<<MARKDOWN_BODY
 # Usage
@@ -399,7 +420,8 @@ MARKDOWN;
         self::assertSame($expected, $markdown);
     }
 
-    public function testItCanBeConvertedToMarkdownWithoutBody(): void
+    #[Test]
+    public function itCanBeConvertedToMarkdownWithoutBody(): void
     {
         $skill = SkillMd::fromArray([
             'name' => 'My Super Static Analysis Skill',
@@ -421,7 +443,8 @@ MARKDOWN;
         self::assertSame($expected, $markdown);
     }
 
-    public function testItThrowsWhenNameIsTooLong(): void
+    #[Test]
+    public function itThrowsWhenNameIsTooLong(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Name must not exceed 64 characters.');
@@ -432,7 +455,8 @@ MARKDOWN;
         ]);
     }
 
-    public function testItThrowsWhenDescriptionIsTooLong(): void
+    #[Test]
+    public function itThrowsWhenDescriptionIsTooLong(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Description must not exceed 1024 characters.');
@@ -443,7 +467,8 @@ MARKDOWN;
         ]);
     }
 
-    public function testItThrowsWhenBodyIsTooLong(): void
+    #[Test]
+    public function itThrowsWhenBodyIsTooLong(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Body must not exceed 65535 characters.');
@@ -455,7 +480,8 @@ MARKDOWN;
         ]);
     }
 
-    public function testItThrowsWhenNameIsNotSet(): void
+    #[Test]
+    public function itThrowsWhenNameIsNotSet(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Name is required.');
@@ -466,7 +492,8 @@ MARKDOWN;
         ]);
     }
 
-    public function testItThrowsWhenDescriptionIsNotSet(): void
+    #[Test]
+    public function itThrowsWhenDescriptionIsNotSet(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Description is required.');
@@ -477,7 +504,8 @@ MARKDOWN;
         ]);
     }
 
-    public function testItThrowsWhenBodyIsNotSet(): void
+    #[Test]
+    public function itThrowsWhenBodyIsNotSet(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Body is required.');
@@ -488,15 +516,17 @@ MARKDOWN;
         ]);
     }
 
-    public function testItAcceptsMaxAllowedLengths(): void
+    #[Test]
+    public function itAcceptsMaxAllowedLengths(): void
     {
         $skill = SkillMd::fromArray([
             'name' => \str_repeat('a', 64),
             'description' => \str_repeat('b', 1024),
-            'body' => '# Some longer Markdown content',
+            'body' => \str_repeat('c', 65535),
         ]);
 
         self::assertSame(64, \strlen($skill->name()));
         self::assertSame(1024, \strlen($skill->description()));
+        self::assertSame(65535, \strlen($skill->body()));
     }
 }
