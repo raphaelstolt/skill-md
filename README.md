@@ -99,20 +99,15 @@ tags:
 # Some longer, skill describing Markdown content
 ```
 
-### Running tests
-
-```bash
-composer test
-```
-
-### License
+## License
 
 This library is licensed under the MIT license. Please see [LICENSE.md](LICENSE.md) for more details.
 
-### Changelog
+## Changelog
 
-Please see [CHANGELOG.md](CHANGELOG.md) for more details.
+All noteworthy changes are documented in the [CHANGELOG.md](CHANGELOG.md).
 
-### Contributing
+## Contributing
 
-Please see [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more details.
+If you're considering contributing to this library, have a look at this repository's [CONTRIBUTING.md](.github/CONTRIBUTING.md)
+for more advice.
